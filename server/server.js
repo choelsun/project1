@@ -4,6 +4,7 @@ const __filename = fileURLToPath(import.meta.url);
 
 import express from "express";
 import mariadb from "mariadb";
+import cors from "cors";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -11,6 +12,7 @@ dotenv.config();
 const app = express()
 
 app.use(express.json()); // json 포맷으로 인식
+app.use(cors()); // CORS policy
 
 // route : .get(): 받기, .post(): 보내기, .put(): 부분 수정 .delete(): 삭제
 // RESTful API : REpresentatinal (대표성 있는 방식으로 요청 URL을 생성하는 규칙)
