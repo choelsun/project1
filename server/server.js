@@ -6,6 +6,7 @@ import express from "express";
 import mariadb from "mariadb";
 import cors from "cors";
 import dotenv from "dotenv";
+import { log } from "console";
 dotenv.config();
 
 
@@ -50,5 +51,11 @@ app.get('/getAllUsers', function (req, res) {
     //not connected
   });
 })
-
-app.listen(3000)
+ // es6 : import(가져오기), (export)내보내기
+ // commonJS : require(가져오기), module.exports 또는 exports(내보내기)
+ const port = 3000;
+ const setting = {
+  app,
+  port
+ }
+ export default setting;
