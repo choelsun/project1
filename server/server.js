@@ -19,10 +19,15 @@ const port = process.env.PORT || 4000;
 app.use(express.json()); // json 포맷으로 인식
 app.use(cors()); // CORS policy
 
+app.get("/", (req, res) => {
+    res.sendFile(__dirname+"/public/index.html");
+})
+
+app.use("/", userRouter);
+
 // route : .get(): 받기, .post(): 보내기, .put(): 부분 수정 .delete(): 삭제
 // RESTful API : REpresentatinal (대표성 있는 방식으로 요청 URL을 생성하는 규칙)
 
-app.use("/", userRouter);
  // es6 : import(가져오기), (export)내보내기
  // commonJS : require(가져오기), module.exports 또는 exports(내보내기)
 //  const port = 3000;
