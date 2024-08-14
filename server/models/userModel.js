@@ -1,6 +1,7 @@
 import mariadb from "mariadb";
 import dotenv from "dotenv";
 dotenv.config();
+import bcrypt from "bcrypt";
 
 // db connection
 const pool = mariadb.createPool({
@@ -37,18 +38,21 @@ const getOneUser = async (userId) => {
         if(conn) conn.end();
     }
 }
-const addOneUser = async (userId, userName, userEmail) => {
+const addUser = async (id, pwd, name, nick, email, hint) => {
     let conn; // 연결설정 변수(연결 POOL)
+    const saltRounds = 10;
+    const hashedPwd = await bcrypt.hash(pwd, saltRounds);
     try{
         conn = await pool.getConnection();
-        const rows = await conn.query("INSERT INTO users (id, name, email)  VALUES (?, ?, ?)"
-            , [userId, userName, userEmail]);
+        const rows = await conn.query("INSERT INTO users (id, pwd, name, nickname, email, pwd_hint)  VALUES (?, ?, ?, ?, ?, ?)"
+            , [id, hashedPwd, name, nick, email, hint]);
 
         return rows;
     } catch(err) {
         console.log(err);
     } finally {
-        if(conn) conn.end();
+        if(conn) conn.end(); // VS release
+         // end(): 연결(pool) 자체 종료 -> 재접시 시간, 네트워크 비용 증가
     }
 }
 // 객체 (Object): 문자열, 숫자, 논리, 함수, 클래스, 심볼
@@ -56,7 +60,7 @@ const addOneUser = async (userId, userName, userEmail) => {
 const userModel = {
     getAllUsers,
     getOneUser,
-    addOneUser
+    addUser
 }
 
 export default userModel;
